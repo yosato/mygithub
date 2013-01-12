@@ -1,5 +1,17 @@
 # coding: utf-8
+Usage= """ python split.py <inputFILEs> <outputDIR>
+	
+		<inputFILEs> 	Directory where .itf files present or list of files
+		<outputDIR> 	Directory where .unp files should be saved
+	
+	This program will output files with the same name but with different
+	indexes for instance if there is an input file named Sentence.itf then
+	the output would be Sentence-0.unp ; Sentence-1.unp ; Sentence-2.unp...
+	and depends on how many ActiveBox are present"""
+
+
 from __future__ import division
+
 try:
 	
     import getopt, sys, os, re, random, math, codecs
@@ -141,59 +153,48 @@ def makeUNP(filesInDIR, inDIR,outDIR):
 		else:
 			print "Number of labels and activebox are not the same...\n .unp file not created for this itf file !!!\nPlease fix the problem before launching again !!!\n For now moving on.."
 
-
-	
-			
-		
-			
-		
-	
-
 def usage():
 	
-	print """ python split.py <inputDIR> <outputDIR>
-	
-		<inputDIR> 	Directory where .itf files present or file
-		<outputDIR> 	Directory where .unp files should be saved
-	
-	This program will output files with the same name but with different
-	indexes for instance if there is an input file named Sentence.itf then
-	the output would be Sentence-0.unp ; Sentence-1.unp ; Sentence-2.unp...
-	and depends on how many ActiveBox are present"""
+	print Usage
 
 
-try:
-    args = sys.argv[1:]
+
+# Script starts here
+if __name__=='__main__':
+
+    try:
+        args = sys.argv[1:]
     
-except sys.ErrorDuringImport:
-    usage()
-    sys.exit(2)
+    except sys.ErrorDuringImport:
+        usage()
+        sys.exit(2)
 
 
-if len(args) !=2 :
-	usage()
+    if len(args) !=2 :
+        usage()
 	
-	sys.exit("=======No input and output directory specified======")
-else:
-	if not os.path.exists(args[0]) :
-		print "path unreachable :"+args[0]
-		sys.exit()
-	if not os.path.exists(args[1]):
-		print "path unreachable :"+args[1]
-		sys.exit()
+        sys.exit("=======No input and output directory specified======")
+    else:
+        if not os.path.exists(args[0]) :
+            print "path unreachable :"+args[0]
+            sys.exit()
+        if not os.path.exists(args[1]):
+            print "path unreachable :"+args[1]
+            sys.exit()
 	
-inDIR=args[0]
-outDIR=args[1]
+    inFiles=args[0]
+    outDIR=args[1]
 
-if os.path.isfile(inDIR) :
-	if "/" in inDIR:
+    if type(inFiles)=='list':
+        if os.path.isfile(inDIR) :
+            if "/" in inDIR:
 		tmp=inDIR.rpartition("/")
 		itfFILE=tmp[2]
 		
-	print itfFILE
-	makeUNP(itfFILE, tmp[0],outDIR)
+            print itfFILE
+            makeUNP(itfFILE, tmp[0],outDIR)
 	
-if os.path.isdir(inDIR) :
+    elif os.path.isdir(inDIR) :
 	filesInDIR = os.listdir(inDIR)
 	print "directory"
 	for itfFILE in filesInDIR:
