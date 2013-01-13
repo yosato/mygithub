@@ -1,5 +1,6 @@
 # coding: utf-8
 
+# another fake comment...
 # changes made by YS: make the input list based. The user inputs either Dir or the list of files. One needs to give a list even for a single file, i.e. [<FileName.].
 
 Usage= """ python split.py <inputDir/FILEs> <outputDIR>
@@ -14,8 +15,6 @@ Usage= """ python split.py <inputDir/FILEs> <outputDIR>
 
 
 from __future__ import division
-
-# so, let's say P has made some change...
 
 try:
 	
