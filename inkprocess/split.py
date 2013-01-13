@@ -1,4 +1,7 @@
 # coding: utf-8
+
+# changes made by YS: make the input list based so that it could be either Dir or set of files. You need to give a list even for a single file, i.e. [<FileName.].
+
 Usage= """ python split.py <inputFILEs> <outputDIR>
 	
 		<inputFILEs> 	Directory where .itf files present or list of files
