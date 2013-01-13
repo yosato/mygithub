@@ -1,10 +1,10 @@
 # coding: utf-8
 
-# changes made by YS: make the input list based so that it could be either Dir or set of files. You need to give a list even for a single file, i.e. [<FileName.].
+# changes made by YS: make the input list based. The user inputs either Dir or the list of files. One needs to give a list even for a single file, i.e. [<FileName.].
 
-Usage= """ python split.py <inputFILEs> <outputDIR>
+Usage= """ python split.py <inputDir/FILEs> <outputDIR>
 	
-		<inputFILEs> 	Directory where .itf files present or list of files
+		<inputDir/FILEs> 	Directory where .itf files present or list of files
 		<outputDIR> 	Directory where .unp files should be saved
 	
 	This program will output files with the same name but with different
