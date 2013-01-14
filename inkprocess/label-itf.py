@@ -79,7 +79,7 @@ count=0
 for idx in range( len(itfLine) ):
 	
 	#print 	itfLine[idx].strip().lower()
-	
+	#first line edit
 	if "#unipenlabel" in itfLine[idx].lower() :
 		
 		if count <= len(labelLine):
