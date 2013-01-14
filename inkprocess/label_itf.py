@@ -21,7 +21,38 @@ def usage():
            
     """
 
-def main():
+def main(labelLine,itfLine,outputFN):
+
+    count=0
+    for idx in range( len(itfLine) ):
+	
+	#print 	itfLine[idx].strip().lower()
+	#first line edit
+	if "#unipenlabel" in itfLine[idx].lower() :
+		
+		if count <= len(labelLine):
+			itfLine[idx] = itfLine[idx].strip()+" "+labelLine[count]
+			print itfLine[idx].strip()
+			count = count + 1
+		else:
+			print " amount of unipenlabel and actual labels not equal"
+
+
+    f = codecs.open(outputFN,"w", "utf-8")
+
+    print str(len(labelLine)) + " " + str(count)
+    if len(labelLine) == count:
+	
+	for l in range(len(itfLine)) :
+		print >> f,itfLine[l].strip()
+	
+    else :
+	print "length of label file and itf file not equal"
+
+
+
+def __name__=='main':	
+	
 
     try:
         opts, args = getopt.getopt( sys.argv[1:], 'l:h', ["label-file=","help"] )
@@ -76,34 +107,7 @@ def main():
     itfFile=codecs.open(args[0],'r',"utf-8")
     itfLine=itfFile.readlines()
 
-    count=0
-    for idx in range( len(itfLine) ):
-	
-	#print 	itfLine[idx].strip().lower()
-	#first line edit
-	if "#unipenlabel" in itfLine[idx].lower() :
-		
-		if count <= len(labelLine):
-			itfLine[idx] = itfLine[idx].strip()+" "+labelLine[count]
-			print itfLine[idx].strip()
-			count = count + 1
-		else:
-			print " amount of unipenlabel and actual labels not equal"
-
-
-    f = codecs.open(args[1],"w", "utf-8")
-
-    print str(len(labelLine)) + " " + str(count)
-    if len(labelLine) == count:
-	
-	for l in range(len(itfLine)) :
-		print >> f,itfLine[l].strip()
-	
-    else :
-	print "length of label file and itf file not equal"
-
-	
-	
+    main(labelLine, itfLine, args[1])
 
 
 	
