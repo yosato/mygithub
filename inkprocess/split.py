@@ -3,6 +3,16 @@
 # another fake comment...
 # changes made by YS: make the input list based. The user inputs either Dir or the list of files. One needs to give a list even for a single file, i.e. [<FileName.].
 
+from __future__ import division
+
+try:
+	
+    import getopt, sys, os, re, random, math, codecs
+except:
+    sys.stderr.write( "ERROR: a module necessary could not be imported\n" )
+    sys.exit(2)
+  
+
 Usage= """ python split.py <inputDir/FILEs> <outputDIR>
 	
 		<inputDir/FILEs> 	Directory where .itf files present or list of files
@@ -13,16 +23,6 @@ Usage= """ python split.py <inputDir/FILEs> <outputDIR>
 	the output would be Sentence-0.unp ; Sentence-1.unp ; Sentence-2.unp...
 	and depends on how many ActiveBox are present"""
 
-
-from __future__ import division
-
-try:
-	
-    import getopt, sys, os, re, random, math, codecs
-except:
-    sys.stderr.write( "ERROR: a module necessary could not be imported\n" )
-    sys.exit(2)
-  
 
 def makeUNP(filesInDIR, inDIR,outDIR):
 	#print filesInDIR
@@ -178,30 +178,34 @@ if __name__=='__main__':
         usage()
 	
         sys.exit("=======No input and output directory specified======")
-    else:
-        if not os.path.exists(args[0]) :
-            print "path unreachable :"+args[0]
-            sys.exit()
-        if not os.path.exists(args[1]):
-            print "path unreachable :"+args[1]
-            sys.exit()
+#    else:
+#        if not os.path.exists(args[0]) :
+#            print "path unreachable :"+args[0]
+#            sys.exit()
+#        if not os.path.exists(args[1]):
+#            print "path unreachable :"+args[1]
+#            sys.exit()
 	
-    inFiles=args[0]
-    outDIR=args[1]
+    inForDs=args[:-1]
+    outDIR=args[-1]
 
-    if type(inFiles)=='list':
-        if os.path.isfile(inDIR) :
-            if "/" in inDIR:
-		tmp=inDIR.rpartition("/")
-		itfFILE=tmp[2]
+    for inForD in inForDs:
+        tmp=inForD.rpartition("/")
+        if os.path.isfile(inForD) :
+#       if "/" in inDIR:
+
+            itfFILE=tmp[2]
 		
             print itfFILE
             makeUNP(itfFILE, tmp[0],outDIR)
 	
-    elif os.path.isdir(inDIR) :
-	filesInDIR = os.listdir(inDIR)
-	print "directory"
-	for itfFILE in filesInDIR:
+        elif os.path.isdir(inForD) :
+            filesInDIR = os.listdir(inForD)
+            inDIR=inForD
+            print "directory"
+            for itfFILE in filesInDIR:
 		makeUNP(itfFILE, inDIR,outDIR)
+
+
 
 
