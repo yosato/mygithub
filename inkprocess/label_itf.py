@@ -21,47 +21,48 @@ def usage():
            
     """
 
+def main():
 
-try:
-    opts, args = getopt.getopt( sys.argv[1:], 'l:h', ["label-file=","help"] )
-except getopt.GetoptError:
-    usage()
-    sys.exit(2)
+    try:
+        opts, args = getopt.getopt( sys.argv[1:], 'l:h', ["label-file=","help"] )
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
    
 
-print len(opts)
+    print len(opts)
 
-if len(opts) != 1:
+    if len(opts) != 1:
 	usage()
 	exit(2)
 
-for o, v in opts:
+    for o, v in opts:
 	
 	if o in ('-h', '--help'):
-		usage();
-		sys.exit(2)
+            usage();
+            sys.exit(2)
 			
 
 	elif o in ('-l','--label-file'):
 		
-		try:
+            try:
 			with open(v) as f: pass
 			labelFile=codecs.open(v,'r',"utf-8")
 			labelLine=labelFile.readlines()
 			
-		except IOError as e:
+            except IOError as e:
 			s = " label file could not be opened"+v
 			exit(s)
 	else:
-		usage()
-		exit(2)
+            usage()
+            exit(2)
 			
 
 
-if len( args ) != 2:
+    if len( args ) != 2:
 	usage()
 	sys.exit( "Requires one lexicon filename " )
-else:	
+    else:	
 	try:
 		with open(args[0]) as f: pass
 		
@@ -72,11 +73,11 @@ else:
 
 
 
-itfFile=codecs.open(args[0],'r',"utf-8")
-itfLine=itfFile.readlines()
+    itfFile=codecs.open(args[0],'r',"utf-8")
+    itfLine=itfFile.readlines()
 
-count=0
-for idx in range( len(itfLine) ):
+    count=0
+    for idx in range( len(itfLine) ):
 	
 	#print 	itfLine[idx].strip().lower()
 	
@@ -90,15 +91,15 @@ for idx in range( len(itfLine) ):
 			print " amount of unipenlabel and actual labels not equal"
 
 
-f = codecs.open(args[1],"w", "utf-8")
+    f = codecs.open(args[1],"w", "utf-8")
 
-print str(len(labelLine)) + " " + str(count)
-if len(labelLine) == count:
+    print str(len(labelLine)) + " " + str(count)
+    if len(labelLine) == count:
 	
 	for l in range(len(itfLine)) :
 		print >> f,itfLine[l].strip()
 	
-else :
+    else :
 	print "length of label file and itf file not equal"
 
 	
