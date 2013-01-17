@@ -21,12 +21,15 @@ def usage():
            
     """
 
-def main(labelLine,itfLine,outputFN):
+def main(labelFile,itfFile,outputFN):
+
+    labelLine=labelFile.readlines()
+    itfLine=itfFile.readlines()
 
     count=0
     for idx in range( len(itfLine) ):
 	
-	#print 	itfLine[idx].strip().lower()
+	print 	itfLine[idx].strip().lower()
 	#first line edit
 	if "#unipenlabel" in itfLine[idx].lower() :
 		
@@ -38,21 +41,23 @@ def main(labelLine,itfLine,outputFN):
 			print " amount of unipenlabel and actual labels not equal"
 
 
-    f = codecs.open(outputFN,"w", "utf-8")
+#    f = codecs.open(outputFN,"w", "utf-8")
+    f = open(outputFN,'w')
 
     print str(len(labelLine)) + " " + str(count)
     if len(labelLine) == count:
 	
 	for l in range(len(itfLine)) :
-		print >> f,itfLine[l].strip()
-	
+            f.write(itfLine[l].strip())
+	#	print >> f,itfLine[l].strip()
+	f.close()
     else :
 	print "length of label file and itf file not equal"
+        sys.exit(2)
 
 
 
-def __name__=='main':	
-	
+if __name__=='__main__':	
 
     try:
         opts, args = getopt.getopt( sys.argv[1:], 'l:h', ["label-file=","help"] )
@@ -79,7 +84,7 @@ def __name__=='main':
             try:
 			with open(v) as f: pass
 			labelFile=codecs.open(v,'r',"utf-8")
-			labelLine=labelFile.readlines()
+			#labelLine=labelFile.readlines()
 			
             except IOError as e:
 			s = " label file could not be opened"+v
@@ -105,7 +110,7 @@ def __name__=='main':
 
 
     itfFile=codecs.open(args[0],'r',"utf-8")
-    itfLine=itfFile.readlines()
+    #itfLine=itfFile.readlines()
 
     main(labelLine, itfLine, args[1])
 

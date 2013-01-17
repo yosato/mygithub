@@ -18,33 +18,12 @@ def usage():
 	present in the inputDIR"""
 
 
-try:
-    args = sys.argv[1:]
-    
-except sys.ErrorDuringImport:
-    usage()
-    sys.exit(2)
+def main(inDIR,outFILE):
 
+    filesInDIR = os.listdir(inDIR)
+    count = 0
+    for itfFILE in filesInDIR:
 
-if len(args) !=2 :
-	usage()
-	
-	sys.exit("=======No input and output directory specified======")
-else:
-	if not os.path.exists(args[0]) :
-		print "path unreachable :"+args[0]
-		sys.exit()
-	if not os.path.exists(os.path.dirname(args[1])):
-		print "path unreachable :"+args[1]
-		sys.exit()
-
-inDIR=args[0]
-outFILE=args[1]
-filesInDIR = os.listdir(inDIR)
-
-count = 0
-for itfFILE in filesInDIR:
-	
 	#print itfFILE
 	if itfFILE.endswith(".unp"):
 		
@@ -74,4 +53,34 @@ for itfFILE in filesInDIR:
 			print itfFILE+" contains empty label"
 		
 
-print str(count)+" dbd files created"
+    print str(count)+" dbd files created"
+
+
+## SCRIPT STARTS HERE
+
+if __name__=='__main__':
+    try:
+        args = sys.argv[1:]
+    
+    except sys.ErrorDuringImport:
+        usage()
+        sys.exit(2)
+
+
+    if len(args) !=2 :
+	usage()
+	
+	sys.exit("=======No input and output directory specified======")
+    else:
+	if not os.path.exists(args[0]) :
+		print "path unreachable :"+args[0]
+		sys.exit()
+	if not os.path.exists(os.path.dirname(args[1])):
+		print "path unreachable :"+args[1]
+		sys.exit()
+
+    inDIR=args[0]
+    outFILE=args[1]
+
+    main(inDIR,outFILE,fileInDIR)
+

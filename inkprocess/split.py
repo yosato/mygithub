@@ -26,6 +26,7 @@ Usage= """ python split.py <inputDir/FILEs> <outputDIR>
 
 def makeUNP(filesInDIR, inDIR,outDIR):
 	#print filesInDIR
+    for itfFILE in filesInDIR:
 	if itfFILE.endswith(".itf"):
 		
 		print "processing file : "+itfFILE
@@ -161,9 +162,26 @@ def usage():
 	
 	print Usage
 
+def main(inForDs,unpDir):
+    for inForD in inForDs:
+        tmp=inForD.rpartition("/")
+        if os.path.isfile(inForD) :
+#       if "/" in inDIR:
+
+            itfFILE=tmp[2]
+		
+            print itfFILE
+            makeUNP(itfFILE, tmp[0],unpDir)
+	
+        elif os.path.isdir(inForD) :
+            filesInDIR = os.listdir(inForD)
+            inDIR=inForD
+            print "directory"
+            for itfFILE in filesInDIR:
+		makeUNP(itfFILE, inDIR,unpDir)
 
 
-# Script starts here
+# Script starts here, if invoked from shell
 if __name__=='__main__':
 
     try:
@@ -189,23 +207,7 @@ if __name__=='__main__':
     inForDs=args[:-1]
     outDIR=args[-1]
 
-    for inForD in inForDs:
-        tmp=inForD.rpartition("/")
-        if os.path.isfile(inForD) :
-#       if "/" in inDIR:
-
-            itfFILE=tmp[2]
-		
-            print itfFILE
-            makeUNP(itfFILE, tmp[0],outDIR)
-	
-        elif os.path.isdir(inForD) :
-            filesInDIR = os.listdir(inForD)
-            inDIR=inForD
-            print "directory"
-            for itfFILE in filesInDIR:
-		makeUNP(itfFILE, inDIR,outDIR)
-
+    main(inForDs,outDir)
 
 
 
