@@ -34,9 +34,6 @@ echo -e "\n"
 
 # common variables
 Vers=$1
-ResultDir=y:/yo/jp_exp/ja_JP_4.9/v${Vers}
-ResDir=${jpResDir}
-#ResDir=${jpOldResDir}
 ResStem=ja_JP_jisx0213-lk-text
 
 #normal checking
@@ -45,6 +42,30 @@ echo 'you need a version arg'
 exit
 fi
 
+# Def values
+if [ "$2" = "" ]; then
+    ResDir=$jpResDir
+else
+    ResDir=$2
+fi
+
+if [ "$3" = "" ]; then
+    ResultDir='y:/yo/jp_exp/ja_JP_5.0/v'${Vers}
+else
+    ResultDir=$3'/v'${Vers}
+fi
+
+set -x
+
+if [ ! -d "${ResultDir}" ]; then
+    mkdir ${ResultDir}
+fi
+
+set +x
+echo stopping; read
+
+echo "On $ResultDir, resource ${ResDir}/${ResStem}. okay?"
+read
 
 echo 'first doing the old inks'
 

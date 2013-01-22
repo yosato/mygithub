@@ -17,17 +17,17 @@ Lang='ja_JP'
 # and these are the ones
 # sandbag, resource and source
 SBSrcLangDir=${SBSrcRootDir}/${Lang}
-SBSrcBackupDir=${SBSrcRootDir}/${Lang}_org
+OrgSrcLangDir=${SBSrcRootDir}/${Lang}_org
 SBResLangDir=${SBResRootDir}/${Lang}
   # plus the original, although eventually I had to copy this to another loc
-MyExpDir=${MyLingSrv}/jp_exp/ja_JP_4.0
+MyExpDir=${myLingSrv}/jp_exp/ja_JP_5.0
 
 #InitSrcDir=${MyExpDir}/v0/sources
 #InitResDir=${MyExpDir}/v0/resources
 
 Stem='ja_JP_jisx0213-lk-text'
 
-AddOnDir=${MyLingSrv}/myResources/lex/ja_JP/artl2
+AddOnDir=${myLingSrv}/myResources/lex/ja_JP/artl
 
 perftesting(){
 
@@ -72,6 +72,9 @@ perftesting(){
 
 add_token(){
 
+    echo stopping ; read ; set -x
+   
+
     # Five args, bic or tric -> $Opt, stem name -> $Stem, artl name -> $AddOnFP, prev vers -> $PrevVers, cur vers -> Vers
 
     Opt=$1
@@ -105,6 +108,8 @@ add_token(){
 
     # from PrevVers to Vers, typically n-1 to n, but could be otherwise
     PrevVers=$4; Vers=$5
+
+    set +x ; echo stopping ; read
 
     # copying the orig, this is definitely awkward, but necessary for speed (ARToken)...
     cp -u ${MyExpDir}/v${PrevVers}/sources/* ${SBSrcRootDir}/ja_JP_org/
@@ -183,16 +188,6 @@ add_token_evaluate.sh [VersNum] [ArtlFN] (ScratchOrNot)
 #    exit
 #fi
 
-# backup. copy the prev version src to the src org dir
-if [ "$Start" = 'scratch' ]; then
-    PrevVers=0
-    Vers=0-${Vers}
-    cp -au ${MyExpDir}/v0 ${SBSrcBackupDir}/
-else
-    PrevVers=$((Vers-1))
-    cp -au ${MyExpDir}/v${PrevVers} ${SBSrcBackupDir}/
-fi
-
 # create the dirs for new version if not exists
 if [ ! -d ${MyExpDir}/v${Vers}/sources ]; then
     mkdir -p ${MyExpDir}/v${Vers}/sources
@@ -204,10 +199,9 @@ fi
     # we decide if it is lite or full by whether it's -b (biclass) or -t (triclass)
 
 
-
 # do the light version
-#echo 'first we do the lite version'
-#add_token_evaluate -b ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers} 
+echo 'first we do the lite version'
+add_token -b ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers} 
 
 perftesting -b ${Stem} ${Vers} 
 
