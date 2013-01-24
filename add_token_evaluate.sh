@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# AddRemoveToken --charset=UTF-8 -a -f y:/yo/myResources/lex/ja_JP/artl/baidu_flat.artl -l z:/projects/MyScript_Resources/resources.src/ja_JP_org/ja_JP_jisx0213-lk-text.lex.lex -o z:/projects/MyScript_Resources/resources.src/ja_JP_org/ja_JP_jisx0213-lk-text.lex.occ -t z:/projects/MyScript_Resources/resources.src/ja_JP_org/ja_JP_jisx0213-lk-text.lex.tric  -L z:/projects/MyScript_Resources/resources.src/ja_JP/ja_JP_jisx0213-lk-text.lex.lex -O z:/projects/MyScript_Resources/resources.src/ja_JP/ja_JP_jisx0213-lk-text.lex.occ -T z:/projects/MyScript_Resources/resources.src/ja_JP/ja_JP_jisx0213-lk-text.lex.tri
+
+
 ###
 ## Ingredients: 'artl' file (frequencies and weights), original lex, original occ file, plus either bic (for lite) or tric (for full) or both
 ## Intermediate Output: new lex file, new occ file, new bic/tric file, as well as printing of these
@@ -72,10 +75,12 @@ perftesting(){
 
 add_token(){
 
-    echo stopping ; read ; set -x
-   
-
     # Five args, bic or tric -> $Opt, stem name -> $Stem, artl name -> $AddOnFP, prev vers -> $PrevVers, cur vers -> Vers
+
+    set -x
+
+    echo "Okay, now adding words, make sure the original sources are in the previous state" 
+    echo 'stopping, press enter to proceed'; read
 
     Opt=$1
     if [ "$Opt" = '-b' ]; then
@@ -106,15 +111,14 @@ add_token(){
     OptUpper=`echo $Opt | tr [:lower:] [:upper:]`
 
 
-    # from PrevVers to Vers, typically n-1 to n, but could be otherwise
-    PrevVers=$4; Vers=$5
+#    PrevVers=$4 
+    Vers=$4
 
     set +x ; echo stopping ; read
 
-    # copying the orig, this is definitely awkward, but necessary for speed (ARToken)...
-    cp -u ${MyExpDir}/v${PrevVers}/sources/* ${SBSrcRootDir}/ja_JP_org/
-    OrgSrcLangDir=${SBSrcRootDir}/ja_JP_org
-
+    # copying the source to a diff dir (org), this is definitely awkward, but necessary for speed (ARToken)...
+#    OrgSrcLangDir=${SBSrcRootDir}/ja_JP_org
+#    cp -u ${SBSrcRootDir}/ja_JP/* ${OrgSrcLangDir} || { echo 'copy failed'; exit 1; }
 
     LexFN=${StemPlus}.lex.lex
 
@@ -158,17 +162,7 @@ add_token(){
     cp -ru ${SBResLangDir}/ ${MyExpDir}/v${Vers}/resources/
     cp -ru ${SBSrcLangDir}/ ${MyExpDir}/v${Vers}/sources/
 
-    echo "${StemPlus} compiled, now peftesting, first with the new ink."
-
- #   perftesting()
-
 }
-
-add_token_evaluate(){
-    add_token $1 $2 $3 $4 $5
-    perftesting $1 $2 $3
-}
-
 
 #===script starts here===#
 
@@ -179,14 +173,14 @@ Artl=$2
 Start=$3
 
 Usage='Usage:\n
-add_token_evaluate.sh [VersNum] [ArtlFN] (ScratchOrNot)
+add_token_evaluate.sh [NewVersName] [ArtlFNtoAdd] (ScratchOrNot)
 '
 
-#if [ "$#" -lt 2 ]; then
-#    echo 'You need at least two args'
-#    echo -e $Usage
-#    exit
-#fi
+if [ "$#" -lt 2 ]; then
+    echo 'You need at least two args'
+    echo -e $Usage
+    exit
+fi
 
 # create the dirs for new version if not exists
 if [ ! -d ${MyExpDir}/v${Vers}/sources ]; then
@@ -201,16 +195,18 @@ fi
 
 # do the light version
 echo 'first we do the lite version'
-add_token -b ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers} 
+#add_token -b ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers} 
 
-perftesting -b ${Stem} ${Vers} 
+
+
+#perftesting -b ${Stem} ${Vers} 
 
 
 # then the full one
-#echo 'now the full version'
-#add_token_evaluate -t ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers}
+echo 'now the full version'
+add_token -t ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers}
 
-perftesting -t ${Stem} ${Vers} 
+#perftesting -t ${Stem} ${Vers} 
 
 #cp -au ${SBSrcLangDir}  ${MyExpDir}/v${Vers}/sources
 #cp -au ${SBResLangDir}  ${MyExpDir}/v${Vers}/resources

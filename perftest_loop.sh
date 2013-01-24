@@ -2,7 +2,7 @@
 
 OldDBDs='ja_JP-anoto2-hpr-city.dbd ja_JP-anoto2-hpr-sentence.dbd ja_JP-anoto2-hpr-first_name.dbd ja_JP-anoto2-hpr-last_name.dbd ja_JP-anoto2-hpr-adress.dbd ja_JP-anoto2-hpr-sentence_mix_latin.dbd ja_JP-anoto2-hpr-state.dbd ja_JP-anoto2-hpr-email.dbd'
 
-NewDBDs='combined.dbd words.dbd katakana.dbd sentences.dbd hiragana.dbd'
+NewDBDs='combined.dbd words.dbd katakana.dbd sentences.dbd'
 
 perftest_lite_full(){
 
@@ -55,42 +55,36 @@ else
     ResultDir=$3'/v'${Vers}
 fi
 
-set -x
-
 if [ ! -d "${ResultDir}" ]; then
-    mkdir ${ResultDir}
-fi
+    echo 'Reulstdir should exist'; exit
 
-set +x
-echo stopping; read
+fi
 
 echo "On $ResultDir, resource ${ResDir}/${ResStem}. okay?"
 read
 
-echo 'first doing the old inks'
 
-cd /cygdrive/i/Test_dbds/ja_JP
-
-for DBD in $OldDBDs
-
-do
-
-echo "Testing $DBDFP with ${ResDir}/${ResStem}"
-
-perftest_lite_full $DBD $ResDir $ResStem $ResultDir
-
-done
-
-echo 'now we do new inks'
+echo 'first we do new inks'
 
 cd /cygdrive/y/yo/userTest/ja_JP/ja_JP_2012-13_1/dbds
 
 for DBD in $NewDBDs
-
 do
-
+echo "Testing $DBD with ${ResDir}/${ResStem}"
 perftest_lite_full $DBD $ResDir $ResStem $ResultDir
-
 done
+
+
+echo 'now doing the old inks'
+
+cd /cygdrive/i/Test_dbds/ja_JP
+
+for DBD in $OldDBDs
+do
+echo "Testing $DBD with ${ResDir}/${ResStem}"
+perftest_lite_full $DBD $ResDir $ResStem $ResultDir
+done
+
+
 
 
