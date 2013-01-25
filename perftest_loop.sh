@@ -15,15 +15,19 @@ ResultDir=$4
 
 set +x
 
-echo "perftesting $DBD first full version"
+echo "perftesting $DBD first lite version"
 
-PerfTester.exe -v --discard-case-variations -q 221 -r z:/projects/MyScript_Builder_SE/resources/ja_JP/ja_JP_jisx0213-ak-cur.res -r ${ResDir}'/'${ResStem}.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}
+PerfTester.exe -v --discard-case-variations -q 221 -r z:/projects/MyScript_Builder_SE/resources/ja_JP/ja_JP_jisx0213-ak-cur.lite.res -r ${ResDir}'/'${ResStem}.lite.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}_lite
 
 echo "full version test done for $DBD"
 
-echo 'perftesting, lite version'
+echo 'perftesting, full version'
 
-PerfTester.exe -v --discard-case-variations -q 221 -r z:/projects/MyScript_Builder_SE/resources/ja_JP/ja_JP_jisx0213-ak-cur.lite.res -r ${ResDir}'/'${ResStem}.lite.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}_lite
+
+
+PerfTester.exe -v --discard-case-variations -q 221 -r z:/projects/MyScript_Builder_SE/resources/ja_JP/ja_JP_jisx0213-ak-cur.res -r ${ResDir}'/'${ResStem}.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}
+
+
 
 echo "lite version test done for $DBD"
 echo -e "\n"

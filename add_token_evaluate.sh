@@ -32,44 +32,6 @@ Stem='ja_JP_jisx0213-lk-text'
 
 AddOnDir=${myLingSrv}/myResources/lex/ja_JP/artl
 
-perftesting(){
-
-    set -x
-
-    Opt=$1
-    if [ "$Opt" = '-b' ]; then
-	Stem=${2}
-	StemPlus=${2}.lite
-	# NC stands for n-class
-	AK='ja_JP_jisx0213-ak-cur.lite.res'
-    elif [ $Opt = '-t' ]; then
-	Stem=$2
-	StemPlus=$2
-	AK='ja_JP_jisx0213-ak-cur.res'
-
-    fi
-
-    Vers=$3
-
-    echo "we are perftesting ${StemPlus}.res Ver. ${Vers}, first with the new ink"
-
-    set +x
-
-
-    PerfTester -v --discard-case-variations -q 221 -r ${SBResLangDir}/${AK} -r ${SBResLangDir}/${StemPlus}.res -f y:/yo/userTest/ja_JP/ja_JP_2012-13_1/dbds-new/combined.dbd > ${MyExpDir}/v${Vers}/inkresults_v${Vers}_${StemPlus}_new || { echo 'perftester failed'; exit 1; }
-
-#    PerfTester -v --discard-case-variations -q 221 -r ${SBResLangDir}/${AK} -r ${SBResLangDir}/${StemPlus}.res -f y:/yo/userTest/ja_JP/ja_JP_2012-13_1/dbds-new/katakana.dbd > ${MyExpDir}/v${Vers}/inkresults_v${Vers}_${StemPlus}_katakana || { echo 'perftester failed'; exit 1; }
-
-   set +x
-    echo 'now with the old ink, two dbds'
-
-    PerfTester -v --discard-case-variations -q 221 -r ${SBResLangDir}/${AK} -r ${SBResLangDir}/${StemPlus}.res -f i:/Test_dbds/ja_JP/ja_JP-anoto2-hpr-sentence.dbd > ${MyExpDir}/v${Vers}/inkresults_v${Vers}_${StemPlus}_oldSent || { echo 'perftester failed failed'; exit 1; }
-
-    PerfTester -v --discard-case-variations -q 221 -r ${SBResLangDir}/${AK} -r ${SBResLangDir}/${StemPlus}.res -f i:/Test_dbds/ja_JP/ja_JP-anoto2-hpr-dataformat.dbd > ${MyExpDir}/v${Vers}/inkresults_v${Vers}_${StemPlus}_oldDF || { echo 'perftester failed failed'; exit 1; }
-
-
-}
-
 # build lite resources first
 # just outputting the original lex 
 
@@ -79,8 +41,7 @@ add_token(){
 
     set -x
 
-    echo "Okay, now adding words, make sure the original sources are in the previous state" 
-    echo 'stopping, press enter to proceed'; read
+
 
     Opt=$1
     if [ "$Opt" = '-b' ]; then
@@ -116,10 +77,6 @@ add_token(){
 
     set +x ; echo stopping ; read
 
-    # copying the source to a diff dir (org), this is definitely awkward, but necessary for speed (ARToken)...
-#    OrgSrcLangDir=${SBSrcRootDir}/ja_JP_org
-#    cp -u ${SBSrcRootDir}/ja_JP/* ${OrgSrcLangDir} || { echo 'copy failed'; exit 1; }
-
     LexFN=${StemPlus}.lex.lex
 
     InLexFP=${OrgSrcLangDir}/${LexFN}
@@ -151,16 +108,16 @@ add_token(){
 #    PrintLM -o ${NewPrintFP} -l ${OutLexFP} -m ${OutNCMng}
 #    PrintLM -o ${NewPrintFP} -l ${OutLexFP} ${Opt} ${OutNCFP}
 
-    # bug, probably needs to be looked at
-    rm ${SBResLangDir}/${StemPlus}.res
-    rm ${SBResRootDir}/internal/ja_JP/${StemPlus}.lex.level2.res
+    # bug, probably needs to be looked at#
+#    rm ${SBResLangDir}/${StemPlus}.res
+#    rm ${SBResRootDir}/internal/ja_JP/${StemPlus}.lex.level2.res
 
 #    ms_lrt_vo_cmd compile ja_JP_jisx0213-lk-text.lite.ardef
-    ms_lrt_vo_cmd compile ja_JP--MSB_SE-packDef-internal.mk #> stdout.1
-    ms_lrt_vo_cmd compile ja_JP--MSB_SE-packDef.mk #
+#    ms_lrt_vo_cmd compile ja_JP--MSB_SE-packDef-internal.mk #> stdout.1
+#    ms_lrt_vo_cmd compile ja_JP--MSB_SE-packDef.mk #
 
-    cp -ru ${SBResLangDir}/ ${MyExpDir}/v${Vers}/resources/
-    cp -ru ${SBSrcLangDir}/ ${MyExpDir}/v${Vers}/sources/
+#    cp -ru ${SBResLangDir}/ ${MyExpDir}/v${Vers}/resources/
+#    cp -ru ${SBSrcLangDir}/ ${MyExpDir}/v${Vers}/sources/
 
 }
 
@@ -190,14 +147,22 @@ if [ ! -d ${MyExpDir}/v${Vers}/resources ]; then
     mkdir -p ${MyExpDir}/v${Vers}/resources
 fi
 
+    # copying the source to a diff dir (org), this is definitely awkward, but necessary for speed (ARToken)...
+echo "Okay, now adding words, make sure the original sources are in the previous state" 
+echo 'stopping, press enter to proceed, if skipping copy, enter s'
+read Input
+
+if [ $Input != 's' ]; then
+    OrgSrcLangDir=${srcRootDir}/ja_JP_org
+    cp -u ${srcRootDir}/ja_JP/* ${OrgSrcLangDir} || { echo 'copy failed'; exit 1; }
+fi
+
     # we decide if it is lite or full by whether it's -b (biclass) or -t (triclass)
 
 
 # do the light version
 echo 'first we do the lite version'
-#add_token -b ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers} 
-
-
+add_token -b ${Stem} ${AddOnDir}/${Artl} ${PrevVers} ${Vers} 
 
 #perftesting -b ${Stem} ${Vers} 
 
