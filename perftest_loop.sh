@@ -1,8 +1,8 @@
 #!/bin/bash
 
-OldDBDs='ja_JP-anoto2-hpr-city.dbd ja_JP-anoto2-hpr-sentence.dbd ja_JP-anoto2-hpr-first_name.dbd ja_JP-anoto2-hpr-last_name.dbd ja_JP-anoto2-hpr-adress.dbd ja_JP-anoto2-hpr-sentence_mix_latin.dbd ja_JP-anoto2-hpr-state.dbd ja_JP-anoto2-hpr-email.dbd'
+OldDBDs='ja_JP-anoto2-hpr-city.dbd ja_JP-anoto2-dataformat.dbd ja_JP-anoto2-hpr-sentence.dbd ja_JP-anoto2-hpr-first_name.dbd ja_JP-anoto2-hpr-last_name.dbd ja_JP-anoto2-hpr-adress.dbd ja_JP-anoto2-hpr-sentence_mix_latin.dbd ja_JP-anoto2-hpr-state.dbd ja_JP-anoto2-hpr-email.dbd'
 
-NewDBDs='combined.dbd words.dbd katakana.dbd sentences.dbd'
+NewDBDs='words.dbd combined.dbd katakana.dbd sentences.dbd'
 
 perftest_lite_full(){
 
@@ -17,7 +17,7 @@ set +x
 
 echo "perftesting $DBD first lite version"
 
-PerfTester.exe -v --discard-case-variations -q 221 -r z:/projects/MyScript_Builder_SE/resources/ja_JP/ja_JP_jisx0213-ak-cur.lite.res -r ${ResDir}'/'${ResStem}.lite.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}_lite
+PerfTester.exe -v --discard-case-variations -q 221 -r ${ResDir}/ja_JP_jisx0213-ak-cur.lite.res -r ${ResDir}'/'${ResStem}.lite.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}_lite
 
 echo "full version test done for $DBD"
 
@@ -25,7 +25,7 @@ echo 'perftesting, full version'
 
 
 
-PerfTester.exe -v --discard-case-variations -q 221 -r z:/projects/MyScript_Builder_SE/resources/ja_JP/ja_JP_jisx0213-ak-cur.res -r ${ResDir}'/'${ResStem}.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}
+PerfTester.exe -v --discard-case-variations -q 221 -r ${ResDir}/ja_JP_jisx0213-ak-cur.res -r ${ResDir}'/'${ResStem}.res  -f ${DBD} > ${ResultDir}'/'inkresults_${DBD}
 
 
 
@@ -41,10 +41,10 @@ Vers=$1
 ResStem=ja_JP_jisx0213-lk-text
 
 #normal checking
-if [ $# != 1 ]; then
-echo 'you need a version arg'
-exit
-fi
+#if [ $# != 1 ]; then
+#echo 'you need a version arg'
+#exit
+#fi
 
 # Def values
 if [ "$2" = "" ]; then
