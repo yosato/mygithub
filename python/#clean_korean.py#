@@ -1,0 +1,7 @@
+#!/usr/env python3
+
+import sys
+
+FN=sys.argv[1]
+
+F=open(FN).readlines()
